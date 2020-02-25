@@ -1,23 +1,3 @@
-// const express = require('express');
-// const mongoose = require('mongoose');
-// const app = express();
-// var bodyParser = require('body-parser');
-// app.use(bodyParser.text());
-// app.use(bodyParser.json()); // to support JSON-encoded bodies
-// app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
-//     extended: true
-// }));
-// mongoose.connect("mongodb://localhost:27017/mydb", { useNewUrlParser: true, useUnifiedTopology: true });
-// var db = mongoose.connection
-//     .once('open', () => console.log('Connected to Database'))
-//     .on("error", (err) => {
-//         console.log("Error: ", err);
-//         return;
-//     });
-
-// app.listen(4600, () => console.log('Server is Listening on port 4500..'));
-
-
 const bodyParser = require('body-parser');
 const user = require('./controllers/user/user');
 const login = require('./controllers/login/login');
@@ -26,11 +6,27 @@ const review = require('./controllers/reviews/review');
 module.exports = function(app) {
 
 
+
     app.use(bodyParser.text())
 
-    app.use('/api/user', user);
+    app.use('/api/auth', user);
+
     app.use('/api/auth', login);
-    app.use('/api/product', product);
+
+    const checkAuth = (req, res, next) => {
+        console.log(req.body)
+        if (!req.headers.authorization) {
+            return res.status(403).json({ error: 'No credentials sent!' });
+        }
+
+        // check valid
+        console.log(req.headers.authorization);
+
+        next();
+    };
+    app.use(checkAuth);
+
+    app.use('/api/products', product);
     app.use('/api/review', review);
 
     //invalid url

@@ -5,12 +5,14 @@ var db_product = require('../../models/schemas/product_schema')
 // Crete the Product Reviews by the product Id
 
 exports.create_review = (req, res) => {
-
     var content = JSON.parse(req.body.toString())
+
     db_product.findOne({ p_id: req.params.p_id }, function(err, docs) {
-        if (docs !== null) {
+
+        if (docs == null) {
             var obj = new db({
-                r_mess: content.review_message,
+                review_id: content.review_id,
+                review_message: content.review_message,
                 product_id: req.params.p_id
             })
             obj.save((err, data) => {
@@ -29,7 +31,7 @@ exports.update_review = (req, res) => {
 
     var content = JSON.parse(req.body.toString())
 
-    formData.findOneAndUpdate({ review_id: req.params.id, product_id: req.params.p_id }, content, { new: true }, function(err, doc) {
+    db.findOneAndUpdate({ review_id: req.params.id, product_id: req.params.p_id }, content, { new: true }, function(err, doc) {
         if (doc === null) {
 
             res.send("product review or review id not exist");
