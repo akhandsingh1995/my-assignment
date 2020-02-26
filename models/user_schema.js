@@ -7,5 +7,16 @@ var user = db.Schema({
 });
 
 
+user.methods.toJSON = function() {
+
+    var object1 = this.toObject();
+    delete object1.password;
+    delete object1._id;
+    // delete object1.__v;
+
+
+    return object1;
+}
+
 // compilation of schema 
-module.exports = db.model('userdata', user, 'user')
+module.exports = db.model('user', user)
