@@ -76,7 +76,7 @@ exports.log_in = (req, res) => {
                     console.log(!bcrypt.compareSync(content.password, docs.password))
                 } else {
                     res.json({
-                        sucess: true,
+                        success: true,
                         message: "Successfull Login",
                         data: content.email
 
